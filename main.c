@@ -9,6 +9,7 @@
 #define NAME_LEN 50
 #define BRAND_LEN 30
 #define WEBSITE_LEN 100
+#define MAX_PRICE 1000000
 
 struct Product {
     char name[NAME_LEN];
@@ -40,6 +41,43 @@ void clear_input_buffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
+
+
+/**
+ * Проверяет корректность введённой строки
+ * @param str - проверяемая строка (может быть NULL)
+ * @param max_len - максимальная длина
+ * @return 1 если корректна, 0 если некорректна или NULL
+ */
+int validate_string(const char* str, int max_len) {
+    if (str == NULL || strlen(str) == 0) {
+        return 0;
+    }
+    if (strlen(str) >= max_len) {
+        return 0;
+    }
+    // Проверка на недопустимые символы
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '\n' || str[i] == '\t') {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+int validate_price(int price) {
+    if (price < 0) {
+        printf("Ошибка: цена не может быть отрицательной\n");
+        return 0;
+    }
+    if (price > MAX_PRICE) {  // ← ИСПОЛЬЗУЕМ КОНСТАНТУ
+        printf("Предупреждение: цена превышает максимум (%d)\n", MAX_PRICE);
+    }
+    return 1;
+}
+
+
 
 
 int get_int_input() {
@@ -269,20 +307,22 @@ void output_menu() {
     }
 }
 
+
 void output_screen() {
     if (count == 0) {
         printf("\nБаза данных пуста.\n");
         return;
     }
 
-    // ДРУГОЕ ИЗМЕНЕНИЕ - счётчик товаров
-    printf("\n========== БАЗА ДАННЫХ ТОВАРОВ (Всего: %d) ==========\n", count);
-    printf("%-4s | %-20s | %-15s | %-10s | %-30s\n", 
-           "№", "Наименование", "Бренд", "Цена", "Сайт");
-    printf("-----+----------------------+-----------------+------------+--------------------------------\n");
+    // ОБЪЕДИНЁННАЯ ВЕРСИЯ: счётчик из v2 + рамки из v1
+    printf("\n");
+    printf("╔═══════════════════════ ТОВАРОВ: %d ════════════════════════╗\n", count);
+    printf("╔════╦══════════════════════╦═════════════════╦═══════════╦══════════════════════════════╗\n");
+    printf("║ №  ║ Наименование         ║ Бренд           ║ Цена      ║ Сайт                         ║\n");
+    printf("╠════╬══════════════════════╬═════════════════╬═══════════╬══════════════════════════════╣\n");
 
     for (int i = 0; i < count; i++) {
-        printf("%-4d | %-20s | %-15s | %-10d | %-30s\n", 
+        printf("║%-4d║ %-20s ║ %-15s ║ %-9d ║ %-28s ║\n", 
                i + 1, 
                database[i].name, 
                database[i].brand, 
@@ -290,7 +330,7 @@ void output_screen() {
                database[i].website);
     }
     
-    printf("===================================================================================\n");
+    printf("╚════╩══════════════════════╩═════════════════╩═══════════╩══════════════════════════════╝\n");
 }
 
 
@@ -342,6 +382,12 @@ void add_data() {
     }
     clear_input_buffer();
 
+
+    if (!validate_string(database[count].name, NAME_LEN)) {
+    printf("Ошибка: некорректное наименование\n");
+    return;
+    }
+
     printf("Бренд: ");
     if (scanf("%29s", database[count].brand) != 1) {
         printf("Ошибка ввода бренда.\n");
@@ -352,6 +398,10 @@ void add_data() {
 
     printf("Цена: ");
     database[count].price = get_int_input();
+
+    if (!validate_price(database[count].price)) {
+    return;
+    }
 
     if (database[count].price < 0) {
         printf("Ошибка: цена не может быть отрицательной.\n");
