@@ -42,6 +42,25 @@ void clear_input_buffer() {
 }
 
 
+/**
+ * Проверяет корректность введённой строки
+ * @param str - проверяемая строка
+ * @param max_len - максимальная длина
+ * @return 1 если корректна, 0 если нет
+ */
+int validate_string(const char* str, int max_len) {
+    if (str == NULL || strlen(str) == 0) {
+        return 0;
+    }
+    if (strlen(str) >= max_len) {
+        return 0;
+    }
+    return 1;
+}
+
+
+
+
 int get_int_input() {
     int value;
     int result;
