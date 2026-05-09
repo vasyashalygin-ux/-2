@@ -6,3 +6,7 @@
 
 * 2392949233
 
+
+## Git Hooks
+- Pre-commit: проверка кода
+- Post-commit: логирование
