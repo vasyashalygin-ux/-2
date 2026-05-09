@@ -373,6 +373,12 @@ void add_data() {
     }
     clear_input_buffer();
 
+
+    if (!validate_string(database[count].name, NAME_LEN)) {
+    printf("Ошибка: некорректное наименование\n");
+    return;
+    }
+
     printf("Бренд: ");
     if (scanf("%29s", database[count].brand) != 1) {
         printf("Ошибка ввода бренда.\n");
@@ -383,6 +389,10 @@ void add_data() {
 
     printf("Цена: ");
     database[count].price = get_int_input();
+
+    if (!validate_price(database[count].price)) {
+    return;
+    }
 
     if (database[count].price < 0) {
         printf("Ошибка: цена не может быть отрицательной.\n");
