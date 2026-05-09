@@ -9,6 +9,7 @@
 #define NAME_LEN 50
 #define BRAND_LEN 30
 #define WEBSITE_LEN 100
+#define MAX_PRICE 1000000
 
 struct Product {
     char name[NAME_LEN];
@@ -44,9 +45,9 @@ void clear_input_buffer() {
 
 /**
  * Проверяет корректность введённой строки
- * @param str - проверяемая строка
+ * @param str - проверяемая строка (может быть NULL)
  * @param max_len - максимальная длина
- * @return 1 если корректна, 0 если нет
+ * @return 1 если корректна, 0 если некорректна или NULL
  */
 int validate_string(const char* str, int max_len) {
     if (str == NULL || strlen(str) == 0) {
@@ -55,22 +56,23 @@ int validate_string(const char* str, int max_len) {
     if (strlen(str) >= max_len) {
         return 0;
     }
+    // Проверка на недопустимые символы
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '\n' || str[i] == '\t') {
+            return 0;
+        }
+    }
     return 1;
 }
 
 
-/**
- * Проверяет корректность цены
- * @param price - проверяемая цена
- * @return 1 если корректна, 0 если нет
- */
 int validate_price(int price) {
     if (price < 0) {
         printf("Ошибка: цена не может быть отрицательной\n");
         return 0;
     }
-    if (price > 1000000) {
-        printf("Предупреждение: слишком высокая цена\n");
+    if (price > MAX_PRICE) {  // ← ИСПОЛЬЗУЕМ КОНСТАНТУ
+        printf("Предупреждение: цена превышает максимум (%d)\n", MAX_PRICE);
     }
     return 1;
 }
