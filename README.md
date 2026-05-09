@@ -10,3 +10,6 @@
 ## Git Hooks
 - Pre-commit: проверка кода
 - Post-commit: логирование
+
+## Проверка Git Hooks
+- Тестирование post-commit
