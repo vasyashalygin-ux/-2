@@ -59,6 +59,23 @@ int validate_string(const char* str, int max_len) {
 }
 
 
+/**
+ * Проверяет корректность цены
+ * @param price - проверяемая цена
+ * @return 1 если корректна, 0 если нет
+ */
+int validate_price(int price) {
+    if (price < 0) {
+        printf("Ошибка: цена не может быть отрицательной\n");
+        return 0;
+    }
+    if (price > 1000000) {
+        printf("Предупреждение: слишком высокая цена\n");
+    }
+    return 1;
+}
+
+
 
 
 int get_int_input() {
