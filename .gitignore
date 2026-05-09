@@ -1,0 +1,25 @@
+# Исполняемые файлы
+*.exe
+*.out
+store.exe
+store
+
+# Объектные файлы
+*.o
+*.obj
+
+# IDE файлы
+.vscode/
+.vs/
+
+# Временные файлы
+*.tmp
+*.swp
+*~
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Лог файлы
+commit.log
